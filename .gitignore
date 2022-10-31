@@ -1,0 +1,7 @@
+#
+# Do not commit…
+#
+
+*.swp
+.DS_Store
+assets/
