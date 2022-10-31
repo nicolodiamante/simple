@@ -12,7 +12,7 @@ This prompt was developed to work well with the default Apple Terminal in mind. 
 
 ### Design
 
-The basic zsh prompt configuration works similarly to bash, even though it uses a different syntax. The default bash prompt on macOS is quite elaborate. The zsh default prompt is far shorter than the bash default and even less helpful. Since I work on the local system most of the time, the hostname bears no helpful information to be repeating in every line, becoming superfluous, instead, I wanted it to show just the current working directory following the git branch and its status (if inside a repository). The prompt also shows the condition for the previous commands' exit turning green when the previous command is successfully (exit code zero) and red when the previous command failed (non-zero exit code).
+The basic zsh prompt configuration works similarly to bash, even though it uses a different syntax. The default bash prompt on macOS is quite elaborate. The zsh default prompt is far shorter than the bash default and even less helpful. Since I work on the local system most of the time, the hostname bears no helpful information to be repeating in every line, becoming superfluous, instead, I wanted it to show just the current working directory following the git branch and its status (if inside a repository). The prompt also shows the condition for the previous commands' exit turning green when the previous command is successful (exit code zero) and red when the previous command failed (non-zero exit code).
 <br/><br/>
 
 ### Highlights
