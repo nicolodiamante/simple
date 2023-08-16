@@ -420,6 +420,14 @@ prompt_simple_precmd() {
     echo "${nvm_prompt}"
   }
 
+  # Checks if the `kubectl` command is available.
+  prompt_simple_kubectl() {
+    which kubectl &>/dev/null || return
+    local k8s_context="$(kubectl config current-context 2>/dev/null)"
+    [[ -n "$k8s_context" ]] && echo "%F{$prompt_simple_colors[prompt:k8senv]}${$(k8s_context)}%f"
+  }
+  prompt_simple_k8scontext="\$(prompt_simple_kubectl)"
+
   # Check if we should display the virtual env.
   virtualenv_prompt_info() {
     # Get virtual env.
@@ -462,6 +470,7 @@ prompt_simple_preprompt_render() {
     git:status           'default'
     git:upstream         'default'
     nvmenv               'default'
+    k8senv               'default'
     host                 'default'
     path                 'default'
     prompt:default       'green'
@@ -491,6 +500,7 @@ prompt_simple_setup() {
                                           ${prompt_simple_path}
                                           ${prompt_newline}
                                           ${prompt_simple_virtualenv}
+                                          ${prompt_simple_k8scontext}
                                           ${prompt_indicator}
                                        )
   PROMPT="${(j..)ps1_parts}"
