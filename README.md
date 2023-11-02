@@ -39,7 +39,7 @@ Overall, the customised prompt is designed to make your command line experience 
 - Username and host are only displayed when in an SSH session or a container.
 - Shows the current path in the title and the (current folder and command) when a process is running.
 - Shows the current git branch in the title.
-<br><br>
+  <br><br>
 
 The following diagram shows the structure of the prompt:
 
@@ -58,43 +58,55 @@ The following diagram shows the structure of the prompt:
 
 ## Getting Started
 
-### Installation
+Here are the two methods you can choose from:
 
-Download the repository via curl:
+**Automatic Download via `curl`**: Simply execute the following command in your terminal to quickly download and seamlessly install the utility:
 
 ```shell
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/nicolodiamante/simple/HEAD/bootstrap.sh)"
 ```
 
-Alternatively, you can clone the repository manually:
+**Manual Cloning**: For those who prefer a hands-on approach, you can manually clone the repository to your desired location:
 
 ```shell
 git clone https://github.com/nicolodiamante/simple.git ~/simple
 ```
 
-Once you have downloaded the repository, you can navigate into its directory in the terminal and paste the following code:
+<br>
+
+### Post-Download Steps
+
+**Directory Navigation & Script Execution**: Navigate to the repository's `utils` directory and execute the installation script:
 
 ```shell
-cd utils && source install.sh
+source install.sh
 ```
 
-In order to make Simple available for use in your terminal, the installation script will first look for the .zshrc file and then add the directory containing the script to the fpath array. Alternatively, this can be done manually by editing the .zshrc file and adding the code below.
+**Simple Configuration**: To streamline the integration process, this script systematically identifies the `zshrc` file within the user's environment and appends the `simple/script` path to the pivotal `fpath` variable.
 
 ```shell
 fpath=(~/simple/script $fpath)
 autoload -Uz simple
 ```
-<br/>
+
+<br>
 
 ### Install via [Oh My Zsh][ohmyzsh]
+
+If you're using Oh My Zsh, you can install `simple` as a plugin:
 
 ```shell
 git clone https://github.com/nicolodiamante/simple.git $ZSH_CUSTOM/plugins/simple
 ```
 
-- Add to your zshrc plugins array `plugins=(... simple)`
-- Restart the shell to activate
-<br/><br/>
+Then, add `simple` to your `.zshrc` plugins array:
+
+```shell
+plugins=(... simple)
+```
+
+Restart theshell to activate the changes.
+<br><br>
 
 ## Notes
 
@@ -135,6 +147,7 @@ Any suggestions or feedback you may have for improvement are welcome. If you enc
 </p>
 
 <!-- Link labels: -->
+
 [ohmyzsh]: https://github.com/robbyrussell/oh-my-zsh/
 [zsh-docs]: http://zsh.sourceforge.net/Doc
 [zsh-docs-guide]: http://zsh.sourceforge.net/Guide/zshguide.html

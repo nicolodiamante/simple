@@ -186,8 +186,26 @@ prompt_simple_is_inside_container() {
 #
 
 prompt_simple_dirtrim() {
+  # Recognize the iCloud Drive path.
+  local icloud_path="$HOME/Library/Mobile Documents/com~apple~CloudDocs"
+
+  if [[ "${PWD}" == "$icloud_path"* ]]; then
+    # Replace the iCloud Drive path with the desired abbreviation
+    local icloud_trim="~/iCloud-Drive"
+    local trimmed_path="${PWD#$icloud_path}"
+
+    # If the remaining path has more than one slash, trim it
+    if [[ $(echo "$trimmed_path" | grep -o '/' | wc -l) -gt 1 ]]; then
+      echo "${icloud_trim}/…/${trimmed_path##*/}"
+      return
+    else
+      echo "${icloud_trim}${trimmed_path}"
+      return
+    fi
+  fi
+
   # Split PWD into the first element, elipsis and the last subfolder.
-  local expand_path="$(PWD | sed 's@'"$HOME"'@~@')"
+  local expand_path="$(echo $PWD | sed 's@'"$HOME"'@~@')"
   local split=2
   local pwd_trim='…'
   if [[ $(echo ${expand_path} | grep -o '/' | wc -l) -gt $split ]]; then
