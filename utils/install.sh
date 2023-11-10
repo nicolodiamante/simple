@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 #
-# Install Simple
+# Install Simple.
 #
 
 # Determines the current user's shell, if not `zsh` then exit.
@@ -13,33 +13,42 @@ fi
 # Defines the PATHs.
 SCRIPT_DIR="$(dirname "$0")"
 SCRIPT="${SCRIPT_DIR}/script"
-ZSHRC="${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME}/zsh}/.zshrc"
 
-# Check for SCRIPT directory.
-if [[ ! -d "$SCRIPT" ]]; then
-  echo 'zsh: Simple script directory not found!'
+# Defines the PATH for the .zshrc.
+ZSHRC="${XDG_CONFIG_HOME:-$HOME}/.zshrc"
+
+# Backup .zshrc before updating.
+if [[ -f "$ZSHRC" ]]; then
+  BACKUP="${ZSHRC}.bak_$(date +%F-%H%M%S)"
+  echo "Backing up .zshrc..."
+  if ! cp "${ZSHRC}" "${BACKUP}"; then
+    echo "Failed to backup .zshrc." >&2
+    exit 1
+  else
+    echo "Backup of .zshrc saved as ${BACKUP}."
+  fi
+else
+  echo "No .zshrc file found to backup." >&2
   exit 1
 fi
 
-# Check for ZSHRC file.
-if [[ ! -f "$ZSHRC" ]]; then
-  echo 'zsh: zshrc not found!'
-  exit 1
-fi
+# Update .zshrc.
+SIMPLE_PATH_LINE="fpath=(${HOME}/simple/script \$fpath)"
+AUTOLOAD_LINE="autoload -Uz simple"
 
-# Avoid duplicate lines in zshrc.
-# Check if Simple's lines are already present in .zshrc
-if ! grep -q "# simple" "$ZSHRC"; then
-  # Append the necessary lines to zshrc.
-  cat << EOF >> ${ZSHRC}
-# simple
-fpath=(${SCRIPT} \$fpath)
+# Check for existing Simple configuration in .zshrc
+if grep -Fxq "$SIMPLE_PATH_LINE" "$ZSHRC" && grep -Fxq "$AUTOLOAD_LINE" "$ZSHRC"; then
+  echo "Simple's lines are already present in .zshrc"
+else
+  echo "Updating .zshrc for Simple..."
+  cat << EOF >> "${ZSHRC}"
+
+# Simple PATH.
+fpath=(${HOME}/simple/script \$fpath)
 autoload -Uz simple
 EOF
-  echo "zsh: appended Simple's necessary lines to .zshrc"
-else
-  echo "zsh: Simple's configuration already present in .zshrc"
+  echo "Appended Simple's necessary lines to .zshrc"
 fi
 
-# Advise user to reload shell or open a new terminal session.
-echo "Please reload your zsh shell or open a new terminal session to apply changes."
+# Reminder for the user.
+echo "Remember to insert your OPENAI_API_KEY in ~/.zshrc and then either source it or open a new terminal session."
