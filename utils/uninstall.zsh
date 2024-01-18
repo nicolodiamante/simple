@@ -6,49 +6,16 @@
 
 echo "Starting the uninstallation process of Simple..."
 
-# Defines the PATHs.
-SCRIPT_DIR="${HOME}/simple/script"
+# Define the .zshrc PATH.
 ZSHRC="${ZDOTDIR:-$HOME}/.zshrc"
-ZSHRC_BACKUP_GLOB="${ZSHRC}.bak_*"
+ZSHRC_BACKUP_GLOB="${ZSHRC}_simple_backup*.bak"
 
-# Check for .zshrc and back it up before making changes.
-if [[ -f "$ZSHRC" ]]; then
-  echo "Found .zshrc at ${ZSHRC}. Backing up .zshrc..."
+# Function to remove Simple configurations.
+remove_simple_config() {
+  echo "Checking for Simple configuration in .zshrc..."
 
-  # Check for existing backups and offer to use the latest one.
-  existing_backups=( $ZSHRC_BACKUP_GLOB )
-  if (( ${#existing_backups[@]} > 0 )); then
-    # Sort backups by date, descending.
-    sorted_backups=($(echo "${existing_backups[@]}" | tr ' ' '\n' | sort -r))
-    latest_backup=${sorted_backups[0]}
-    echo "Latest backup found at ${latest_backup}."
-    read -q "REPLY?Do you want to restore the latest backup instead of creating a new one? [y/N] "
-    echo ""
-    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-      # Restore the latest backup.
-      if cp "$latest_backup" "$ZSHRC"; then
-        echo "Restored .zshrc from the latest backup."
-      else
-        echo "Failed to restore .zshrc from the latest backup." >&2
-        exit 1
-      fi
-    fi
-  fi
-
-  if [[ "$REPLY" =~ ^[Nn]$ ]] || [[ -z "$REPLY" ]]; then
-    # If user chooses not to use the latest backup, create a new one.
-    BACKUP="${ZSHRC}.bak_$(date +%F-%H%M%S)"
-    if cp "$ZSHRC" "${BACKUP}"; then
-      echo "Backup saved as ${BACKUP}."
-    else
-      echo "Failed to backup .zshrc." >&2
-      exit 1
-    fi
-  fi
-
-  # Check if Simple configurations are present before removing them.
-  SIMPLE_PATH_LINE="fpath=(${HOME}/simple/script \$fpath)"
-  AUTOLOAD_LINE="autoload -Uz simple"
+  local SIMPLE_PATH_LINE="fpath=(${HOME}/simple/script \$fpath)"
+  local AUTOLOAD_LINE="autoload -Uz simple"
 
   if grep -Fxq "$SIMPLE_PATH_LINE" "$ZSHRC" || grep -Fxq "$AUTOLOAD_LINE" "$ZSHRC"; then
     read -q "REPLY?Simple configurations found. Do you want to remove them from .zshrc? [y/N] "
@@ -63,15 +30,41 @@ if [[ -f "$ZSHRC" ]]; then
         sed -i "/fpath=(${HOME//\//\\/}\/simple\/script \$fpath)/d" "$ZSHRC"
         sed -i '/autoload -Uz simple/d' "$ZSHRC"
       fi
-      echo "Simple configurations have been removed from .zshrc."
+      echo "Simple: Configurations have been removed from .zshrc."
     else
-      echo "No changes made to .zshrc."
+      echo "Simple: No changes made to .zshrc."
     fi
   else
-    echo "No Simple configurations found in .zshrc."
+    echo "Simple: No configurations found in .zshrc."
+  fi
+}
+
+# Check for .zshrc and back it up before making changes.
+if [[ -f "$ZSHRC" ]]; then
+  # Look for the most recent backup.
+  backups=($(ls -t $ZSHRC_BACKUP_GLOB 2>/dev/null))
+  if [[ ${#backups[@]} -gt 0 ]]; then
+    latest_backup="${backups[0]}"
+    echo "Simple: Latest backup found at ${latest_backup}."
+    read -q "REPLY?Do you want to restore from the latest backup? [y/N] "
+    echo ""
+    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+      # Restore the latest backup.
+      if cp "${latest_backup}" "${ZSHRC}"; then
+        echo "Simple: Restored .zshrc from the latest backup."
+        exit 0
+      else
+        echo "Simple: Failed to restore .zshrc from the latest backup." >&2
+        exit 1
+      fi
+    else
+      remove_simple_config
+    fi
+  else
+    remove_simple_config
   fi
 else
-  echo ".zshrc file not found. No cleanup needed."
+  echo "Simple: .zshrc not found. No cleanup needed."
 fi
 
 echo "Simple: Uninstallation complete."
