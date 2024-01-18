@@ -60,13 +60,13 @@ The following diagram shows the structure of the prompt:
 
 Here are the two methods you can choose from:
 
-**Automatic Download via `curl`**: Simply execute the following command in your terminal to quickly download and seamlessly install the utility:
+**Automatic Download via `curl`:** Simply execute the following command in your terminal to quickly download and seamlessly install the utility:
 
 ```shell
 zsh -c "$(curl -fsSL https://raw.githubusercontent.com/nicolodiamante/simple/HEAD/bootstrap.zsh)"
 ```
 
-**Manual Cloning**: For those who prefer a hands-on approach, you can manually clone the repository to your desired location:
+**Manual Cloning:** For those who prefer a hands-on approach, you can manually clone the repository to your desired location:
 
 ```shell
 git clone https://github.com/nicolodiamante/simple.git ~/simple
@@ -76,13 +76,13 @@ git clone https://github.com/nicolodiamante/simple.git ~/simple
 
 ### Post-Download Steps
 
-**Directory Navigation & Script Execution**: Navigate to the repository and execute the installation script:
+**Directory Navigation & Script Execution:** Navigate to the root directory of the repository, and then execute the installation script using the following command:
 
 ```shell
-source utils/install.sh
+source utils/install.zsh
 ```
 
-**Simple Configuration**: To streamline the integration process, this script systematically identifies the `zshrc` file within the user's environment and appends the `simple/script` path to the pivotal `fpath` variable.
+**Simple Configuration:** To streamline the integration process, this script systematically identifies the `zshrc` file within the user's environment and appends the `simple/script` path to the pivotal `fpath` variable.
 
 ```shell
 fpath=(~/simple/script $fpath)
