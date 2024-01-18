@@ -26,7 +26,7 @@ if [[ -f "$ZSHRC" ]]; then
     BACKUP="${ZSHRC}_simple_backup${backup_count}.bak"
 
     echo "Simple: Backing up zshrc as ${BACKUP}..."
-    if cp "$ZSHRC" "${BACKUP}"; then
+    if cp "${ZSHRC}" "${BACKUP}"; then
       echo "Simple: Backup successful."
     else
       echo "Simple: Failed to backup .zshrc. Aborting operation." >&2
@@ -36,12 +36,12 @@ if [[ -f "$ZSHRC" ]]; then
 
   # Updates .zshrc with Simple configurations.
   echo "Simple: Updating .zshrc..."
-  SIMPLE_PATH_LINE="fpath=(${HOME}/simple/script \$fpath)"
+  SIMPLE_PATH_LINE="fpath=($HOME/simple/script $fpath)"
   AUTOLOAD_LINE="autoload -Uz simple"
-  if ! grep -Fxq "$SIMPLE_PATH_LINE" "$ZSHRC" && ! grep -Fxq "$AUTOLOAD_LINE" "$ZSHRC"; then
+  if ! grep -Fxq "${SIMPLE_PATH_LINE}" "${ZSHRC}" && ! grep -Fxq "${AUTOLOAD_LINE}" "${ZSHRC}"; then
     echo "" >> "${ZSHRC}"
     echo "# Simple PATH." >> "${ZSHRC}"
-    echo "fpath=(${HOME}/simple/script \$fpath)" >> "${ZSHRC}"
+    echo "fpath=($HOME/simple/script $fpath)" >> "${ZSHRC}"
     echo "autoload -Uz simple" >> "${ZSHRC}"
     echo "Simple: Appended PATH to ${ZSHRC}"
   else
@@ -57,7 +57,7 @@ else
   echo "Simple: Adding PATH to a new .zshrc..."
   echo "" >> "${ZSHRC}"
   echo "# Simple PATH." >> "${ZSHRC}"
-  echo "fpath=(${HOME}/simple/script \$fpath)" >> "${ZSHRC}"
+  echo "fpath=($HOME/simple/script $fpath)" >> "${ZSHRC}"
   echo "autoload -Uz simple" >> "${ZSHRC}"
   echo "Simple: PATH was added to a new .zshrc."
 fi

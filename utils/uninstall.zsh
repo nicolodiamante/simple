@@ -14,21 +14,21 @@ ZSHRC_BACKUP_GLOB="${ZSHRC}_simple_backup*.bak"
 remove_simple_config() {
   echo "Checking for Simple configuration in .zshrc..."
 
-  local SIMPLE_PATH_LINE="fpath=(${HOME}/simple/script \$fpath)"
+  local SIMPLE_PATH_LINE="fpath=($HOME/simple/script $fpath)"
   local AUTOLOAD_LINE="autoload -Uz simple"
 
-  if grep -Fxq "$SIMPLE_PATH_LINE" "$ZSHRC" || grep -Fxq "$AUTOLOAD_LINE" "$ZSHRC"; then
+  if grep -Fxq "${SIMPLE_PATH_LINE}" "${ZSHRC}" || grep -Fxq "${AUTOLOAD_LINE}" "${ZSHRC}"; then
     read -q "REPLY?Simple configurations found. Do you want to remove them from .zshrc? [y/N] "
     echo ""
     if [[ "$REPLY" =~ ^[Yy]$ ]]; then
       if [[ "$OSTYPE" == "darwin"* ]]; then
-        sed -i '' '/# Simple PATH./d' "$ZSHRC"
-        sed -i '' "/fpath=(${HOME//\//\\/}\/simple\/script \$fpath)/d" "$ZSHRC"
-        sed -i '' '/autoload -Uz simple/d' "$ZSHRC"
+        sed -i '' '/# Simple PATH./d' "${ZSHRC}"
+        sed -i '' "/fpath=($HOME\/simple\/script $fpath)/d" "${ZSHRC}"
+        sed -i '' '/autoload -Uz simple/d' "${ZSHRC}"
       else
-        sed -i '/# Simple PATH./d' "$ZSHRC"
-        sed -i "/fpath=(${HOME//\//\\/}\/simple\/script \$fpath)/d" "$ZSHRC"
-        sed -i '/autoload -Uz simple/d' "$ZSHRC"
+        sed -i '/# Simple PATH./d' "${ZSHRC}"
+        sed -i "/fpath=($HOME\/simple\/script $fpath)/d" "${ZSHRC}"
+        sed -i '/autoload -Uz simple/d' "${ZSHRC}"
       fi
       echo "Simple: Configurations have been removed from .zshrc."
     else
