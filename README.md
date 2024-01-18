@@ -63,7 +63,7 @@ Here are the two methods you can choose from:
 **Automatic Download via `curl`**: Simply execute the following command in your terminal to quickly download and seamlessly install the utility:
 
 ```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/nicolodiamante/simple/HEAD/bootstrap.sh)"
+zsh -c "$(curl -fsSL https://raw.githubusercontent.com/nicolodiamante/simple/HEAD/bootstrap.zsh)"
 ```
 
 **Manual Cloning**: For those who prefer a hands-on approach, you can manually clone the repository to your desired location:
@@ -76,10 +76,10 @@ git clone https://github.com/nicolodiamante/simple.git ~/simple
 
 ### Post-Download Steps
 
-**Directory Navigation & Script Execution**: Navigate to the repository's `utils` directory and execute the installation script:
+**Directory Navigation & Script Execution**: Navigate to the repository and execute the installation script:
 
 ```shell
-source install.sh
+source utils/install.sh
 ```
 
 **Simple Configuration**: To streamline the integration process, this script systematically identifies the `zshrc` file within the user's environment and appends the `simple/script` path to the pivotal `fpath` variable.
@@ -134,9 +134,9 @@ Any suggestions or feedback you may have for improvement are welcome. If you enc
 </p>
 
 <p align="center">
-  <picture>
-    <img src="https://github.com/nicolodiamante/simple/assets/48920263/6245bdc3-deb6-458f-8415-ce5bd7801773" draggable="false" ondragstart="return false;" alt="Nicol&#242; Diamante" title="Nicol&#242; Diamante" width="17px" />
-  </picture>
+  <a href="https://nicolodiamante.com" target="_blank">
+    <img src="https://github.com/nicolodiamante/simple/assets/48920263/6245bdc3-deb6-458f-8415-ce5bd7801773" draggable="false" ondragstart="return false;" alt="Nicol&#242; Diamante Portfolio" title="Nicol&#242; Diamante" width="17px" />
+  </a>
 </p>
 
 <p align="center">

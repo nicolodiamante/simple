@@ -8,7 +8,7 @@
 # This script enhances the Zsh prompt with various features including
 # display of Git status, virtual environment info, and more. It's designed
 # for flexibility and performance optimisation.
-
+#
 # Visual effects
 # See: http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Visual-effects
 # precmd () => a function which is executed just before each prompt
@@ -115,6 +115,14 @@ prompt_simple_update_title_cwd() {
   # Identify the directory using a "file:" scheme URL, including
   # the host name to disambiguate local vs. remote paths.
   printf '\e]7;%s\a' "file://${HOST}${url_path}"
+}
+
+#
+# Define the newline function.
+#
+
+prompt_newline_between_prompts() {
+  print -r ""
 }
 
 #

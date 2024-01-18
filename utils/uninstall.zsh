@@ -8,7 +8,7 @@ echo "Starting the uninstallation process of Simple..."
 
 # Defines the PATHs.
 SCRIPT_DIR="${HOME}/simple/script"
-ZSHRC="${XDG_CONFIG_HOME:-$HOME}/.zshrc"
+ZSHRC="${ZDOTDIR:-$HOME}/.zshrc"
 ZSHRC_BACKUP_GLOB="${ZSHRC}.bak_*"
 
 # Check for .zshrc and back it up before making changes.
@@ -56,11 +56,11 @@ if [[ -f "$ZSHRC" ]]; then
     if [[ "$REPLY" =~ ^[Yy]$ ]]; then
       if [[ "$OSTYPE" == "darwin"* ]]; then
         sed -i '' '/# Simple PATH./d' "$ZSHRC"
-        sed -i '' "/fpath=\(${SCRIPT_DIR//\//\\/} \$fpath\)/d" "$ZSHRC"
+        sed -i '' "/fpath=(${HOME//\//\\/}\/simple\/script \$fpath)/d" "$ZSHRC"
         sed -i '' '/autoload -Uz simple/d' "$ZSHRC"
       else
         sed -i '/# Simple PATH./d' "$ZSHRC"
-        sed -i "/fpath=\(${SCRIPT_DIR//\//\\/} \$fpath\)/d" "$ZSHRC"
+        sed -i "/fpath=(${HOME//\//\\/}\/simple\/script \$fpath)/d" "$ZSHRC"
         sed -i '/autoload -Uz simple/d' "$ZSHRC"
       fi
       echo "Simple configurations have been removed from .zshrc."
@@ -74,4 +74,4 @@ else
   echo ".zshrc file not found. No cleanup needed."
 fi
 
-echo "Uninstallation of Simple is complete."
+echo "Simple: Uninstallation complete."
