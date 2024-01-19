@@ -4,21 +4,21 @@
 # Uninstall Simple.
 #
 
-echo "Starting the uninstallation process of Simple..."
+echo "\nStarting the uninstallation process of Simple..."
 
 # Define the .zshrc PATH.
 ZSHRC="${ZDOTDIR:-$HOME}/.zshrc"
-ZSHRC_BACKUP_GLOB="${ZSHRC}_simple_backup*.bak"
+ZSHRC_BACKUP_GLOB="${ZSHRC}_*.bak"
 
 # Function to remove Simple configurations.
 remove_simple_config() {
-  echo "Checking for Simple configuration in .zshrc..."
+  echo "\nChecking for Simple configuration in .zshrc..."
 
-  local SIMPLE_PATH_LINE="fpath=($HOME/simple/script $fpath)"
-  local AUTOLOAD_LINE="autoload -Uz simple"
+  SIMPLE_PATH_LINE="fpath=($HOME/simple/script $fpath)"
+  AUTOLOAD_LINE="autoload -Uz simple"
 
   if grep -Fxq "${SIMPLE_PATH_LINE}" "${ZSHRC}" || grep -Fxq "${AUTOLOAD_LINE}" "${ZSHRC}"; then
-    read -q "REPLY?Simple configurations found. Do you want to remove them from .zshrc? [y/N] "
+    read -q "REPLY?Simple configurations found in .zshrc. Do you want to remove them? [y/N] "
     echo ""
     if [[ "$REPLY" =~ ^[Yy]$ ]]; then
       if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -64,7 +64,7 @@ if [[ -f "$ZSHRC" ]]; then
     remove_simple_config
   fi
 else
-  echo "Simple: .zshrc not found. No cleanup needed."
+  echo "\nSimple: .zshrc not found. No cleanup needed."
 fi
 
-echo "Simple: Uninstallation complete."
+echo "\nSimple: Uninstall complete."

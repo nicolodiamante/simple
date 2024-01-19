@@ -15,23 +15,25 @@ ZSHRC="${ZDOTDIR:-$HOME}/.zshrc"
 
 # Update .zshrc with Simple.
 if [[ -f "$ZSHRC" ]]; then
-  echo "Starting the installation process of Simple..."
+  echo "\nStarting the installation process of Simple..."
 
   # Ask the user if they want to create a backup.
   read -q "REPLY?Found an existing .zshrc in ${ZSHRC}. Do you want to create a backup? [y/N] "
   echo ""
   if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-    # Count the number of existing 'simple' backups.
-    backup_count=$(ls ${ZSHRC}_simple_backup*.bak 2>/dev/null | wc -l | tr -d ' ')
-    BACKUP="${ZSHRC}_simple_backup${backup_count}.bak"
+    # Backup existing file
+    ZSHRC_BACKUP="${ZSHRC}_$(date "+%Y%m%d%H%M%S").bak"
+    echo "Creating backup of .zshrc as ${ZSHRC_BACKUP}..."
 
-    echo "Simple: Backing up zshrc as ${BACKUP}..."
-    if cp "${ZSHRC}" "${BACKUP}"; then
+    if cp "${ZSHRC}" "${ZSHRC_BACKUP}"; then
       echo "Simple: Backup successful."
     else
-      echo "Simple: Failed to backup .zshrc. Aborting operation." >&2
+      echo "\nSimple: Failed to backup .zshrc. Aborting operation." >&2
       exit 1
     fi
+  else
+    # If the response is not 'yes', proceed without creating a backup.
+    echo "\nSimple: Proceeding without creating a backup."
   fi
 
   # Updates .zshrc with Simple configurations.
@@ -41,8 +43,8 @@ if [[ -f "$ZSHRC" ]]; then
   if ! grep -Fxq "${SIMPLE_PATH_LINE}" "${ZSHRC}" && ! grep -Fxq "${AUTOLOAD_LINE}" "${ZSHRC}"; then
     echo "" >> "${ZSHRC}"
     echo "# Simple PATH." >> "${ZSHRC}"
-    echo "fpath=($HOME/simple/script $fpath)" >> "${ZSHRC}"
-    echo "autoload -Uz simple" >> "${ZSHRC}"
+    echo "${SIMPLE_PATH_LINE}" >> "${ZSHRC}"
+    echo "${AUTOLOAD_LINE}" >> "${ZSHRC}"
     echo "Simple: Appended PATH to ${ZSHRC}"
   else
     echo "Simple: PATH is already present in ${ZSHRC}"
@@ -57,14 +59,15 @@ else
   echo "Simple: Adding PATH to a new .zshrc..."
   echo "" >> "${ZSHRC}"
   echo "# Simple PATH." >> "${ZSHRC}"
-  echo "fpath=($HOME/simple/script $fpath)" >> "${ZSHRC}"
-  echo "autoload -Uz simple" >> "${ZSHRC}"
+  echo "${SIMPLE_PATH_LINE}" >> "${ZSHRC}"
+  echo "${AUTOLOAD_LINE}" >> "${ZSHRC}"
   echo "Simple: PATH was added to a new .zshrc."
 fi
 
 # Attempts to reload .zshrc to apply changes.
 if ! source "${ZSHRC}" &>/dev/null; then
-  echo "Please source .zshrc manually to apply changes." >&2
+  echo "Simple: Failed to reload .zshrc. Please reload manually to apply changes." >&2
 fi
 
-echo "Simple: Installation complete."
+# Prints a success message.
+echo "\nSimple: Install complete."
